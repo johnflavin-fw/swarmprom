@@ -72,33 +72,11 @@ services:
       #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
       #- GF_SMTP_USER=${GF_SMTP_USER}
       #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+      - GF_SERVER_DOMAIN=${HOSTNAME}
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - grafana:/var/lib/grafana
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
-
-  alertmanager:
-    image: stefanprodan/swarmprom-alertmanager:v0.14.0
-    networks:
-      - net
-    environment:
-      - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
-      - SLACK_CHANNEL=${SLACK_CHANNEL:-general}
-      - SLACK_USER=${SLACK_USER:-alertmanager}
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
-    volumes:
-      - alertmanager:/alertmanager
     deploy:
       mode: replicated
       replicas: 1
