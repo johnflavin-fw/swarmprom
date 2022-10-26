@@ -49,8 +49,6 @@ services:
       - /var/run:/var/run
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-    ports:
-      - 8888:8080
     deploy:
       mode: global
       resources:
