@@ -1,5 +1,6 @@
 FROM prom/prometheus:v2.5.0
 # https://hub.docker.com/r/prom/prometheus/tags/
+USER nobody:nogroup
 
 ENV WEAVE_TOKEN=none
 
