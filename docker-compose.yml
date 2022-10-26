@@ -134,7 +134,6 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=${PROMETHEUS_RETENTION:-24h}'
-      - '--web.external-url=/prometheus/'
     volumes:
       - prometheus:/prometheus
     configs:
