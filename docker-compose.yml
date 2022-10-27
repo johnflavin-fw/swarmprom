@@ -49,6 +49,8 @@ services:
       - /var/run:/var/run
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    labels:
+      prometheus-job: cadvisor
     deploy:
       mode: global
       resources:
@@ -115,15 +117,19 @@ services:
           memory: 64M
 
   prometheus:
-    image: xnat/swarmprom-prometheus:v2.5.0
+    image: prom/prometheus:v2.20.0
     networks:
       - net
+    environment:
+      WEAVE_TOKEN: none
+    entrypoint: /etc/prometheus/docker-entrypoint.sh
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=${PROMETHEUS_RETENTION:-24h}'
     volumes:
       - prometheus:/prometheus
+      - ./prometheus/conf:/etc/prometheus/:ro,Z
     configs:
       - source: node_rules
         target: /etc/prometheus/swarm_node.rules.yml
