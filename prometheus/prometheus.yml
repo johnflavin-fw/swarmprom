@@ -50,10 +50,6 @@ scrape_configs:
       - host: unix:///var/run/docker.sock # You can also use http/https to connect to the Docker daemon.
         role: services
     relabel_configs:
-      # Only keep containers that should be running.
-      - source_labels: [__meta_dockerswarm_task_desired_state]
-        regex: running
-        action: keep
       # Only keep containers that have a `prometheus-job` label.
       - source_labels: [__meta_dockerswarm_service_label_prometheus_job]
         regex: .+
