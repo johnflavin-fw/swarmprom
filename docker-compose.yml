@@ -32,6 +32,8 @@ services:
     configs:
       - source: dockerd_config
         target: /etc/caddy/Caddyfile
+    ports:
+      - 9323:9323
     deploy:
       mode: global
       resources:
@@ -53,6 +55,8 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     labels:
       prometheus-job: cadvisor
+    ports:
+      - 8888:8080
     deploy:
       mode: global
       resources:
@@ -110,6 +114,8 @@ services:
       - '--collector.textfile.directory=/etc/node-exporter/'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
       - '--no-collector.ipvs'
+    ports:
+      - 9100:9100
     deploy:
       mode: global
       resources:
