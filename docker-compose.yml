@@ -19,6 +19,8 @@ configs:
     file: ./prometheus/rules/swarm_node.rules.yml
   task_rules:
     file: ./prometheus/rules/swarm_task.rules.yml
+  prometheus_conf:
+    file: ./prometheus/prometheus.yml
 
 services:
   dockerd-exporter:
@@ -121,17 +123,18 @@ services:
     networks:
       - net
     command:
-      - '--config.file=/opt/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=${PROMETHEUS_RETENTION:-24h}'
     volumes:
       - prometheus:/prometheus
-      - ./prometheus/prometheus.yml:/opt/prometheus/prometheus.yml:ro,Z
     configs:
       - source: node_rules
         target: /etc/prometheus/swarm_node.rules.yml
       - source: task_rules
         target: /etc/prometheus/swarm_task.rules.yml
+      - source: prometheus_conf
+        target: /etc/prometheus/prometheus.yml
     deploy:
       mode: replicated
       replicas: 1
