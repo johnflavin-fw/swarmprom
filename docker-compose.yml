@@ -85,6 +85,8 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /etc/hostname:/etc/nodename
+    labels:
+      prometheus-job: node-exporter
     command:
       - '--path.sysfs=/host/sys'
       - '--path.procfs=/host/proc'
